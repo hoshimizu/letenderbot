@@ -3,7 +3,9 @@
 サーバーはよくオフラインになります。
 # 動かし方
 .envファイルを作成し、以下のコードを書き込みます。
+   ```.env
 DISCORD-TOKEN=あなたのDiscordbotトークン
+   ```
 ライブラリをインストールします。
    ```bash
    pip install discord.py python-dotenv
