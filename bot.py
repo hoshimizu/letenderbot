@@ -26,7 +26,7 @@ async def load_extensions():
 
 @bot.event
 async def on_ready():
-    print(f"Logined {bot.user.name}")
+    print(f"Logged in as {bot.user.name} ({bot.user.id})")
 
 async def main():
     async with bot:
