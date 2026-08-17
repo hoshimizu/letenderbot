@@ -36,7 +36,7 @@ class Createinvite(commands.Cog):
         invite_embed = discord.Embed(title='招待リンクを作成しました！', color=discord.Color.green())
         invite_embed.add_field(name='招待リンク:', value=f'{invite_link}', inline=False)
         invite_embed.add_field(name='有効期限:', value='なし', inline=False)
-        invite_embed.add_field(name='使用回数制限:', value='1なし', inline=False)
+        invite_embed.add_field(name='使用回数制限:', value='なし', inline=False)
         await interaction.response.send_message(embed=invite_embed, ephemeral=True)
 
 
