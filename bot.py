@@ -11,7 +11,11 @@ intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
 
-bot = commands.Bot(command_prefix="!", intents=intents)
+bot = commands.Bot(
+    command_prefix="!",
+    intents=intents,
+    allowed_mentions=discord.AllowedMentions(everyone=False, here=False, roles=False),
+)
 
 async def load_extensions():
     if not os.path.exists("./cogs"):

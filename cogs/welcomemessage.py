@@ -1,14 +1,20 @@
+import os
+
 import discord
 from discord import app_commands
 from discord.ext import commands, tasks
 import json
-import os
 
-CONFIG_FILE = 'welcome_config.json'
+CONFIG_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'welcome_config.json')
 _config_cache = {}
 _is_dirty = False
 
 PLACEHOLDERS = ('{usermention}', '{servername}', '{membercount}')
+
+
+def is_admin(interaction: discord.Interaction) -> bool:
+    return (interaction.user.guild_permissions.administrator
+            or interaction.user.id == interaction.guild.owner_id)
 
 
 def load_config_to_cache():
@@ -58,6 +64,10 @@ class welcomemordal(discord.ui.Modal, title='ウェルカムメッセージ設�
         self.channel = channel
 
     async def on_submit(self, interaction: discord.Interaction):
+        if not is_admin(interaction):
+            await interaction.response.send_message('管理者のみ実行できます。', ephemeral=True)
+            return
+
         global _is_dirty
         raw_message = self.message_input.value
         guild = interaction.guild
@@ -113,11 +123,18 @@ class Welcome(commands.Cog):
     @app_commands.describe(channel='入室メッセージを設定するチャンネル')
     @app_commands.default_permissions(administrator=True)
     async def welcomemessage(self, interaction: discord.Interaction, channel: discord.TextChannel):
+        if not is_admin(interaction):
+            await interaction.response.send_message('管理者のみ実行できます。', ephemeral=True)
+            return
         await interaction.response.send_modal(welcomemordal(channel=channel))
 
     @app_commands.command(name='welcomeoff', description='ウェルカムメッセージを削除します。')
     @app_commands.default_permissions(administrator=True)
     async def welcomeoff(self, interaction: discord.Interaction):
+        if not is_admin(interaction):
+            await interaction.response.send_message('管理者のみ実行できます。', ephemeral=True)
+            return
+
         global _is_dirty
         guild_id_str = str(interaction.guild.id)
         if guild_id_str in _config_cache:
@@ -130,6 +147,10 @@ class Welcome(commands.Cog):
     @app_commands.command(name='welcomecheck', description='現在のウェルカムメッセージ設定を確認します。')
     @app_commands.default_permissions(administrator=True)
     async def welcomecheck(self, interaction: discord.Interaction):
+        if not is_admin(interaction):
+            await interaction.response.send_message('管理者のみ実行できます。', ephemeral=True)
+            return
+
         guild_id_str = str(interaction.guild.id)
         config = _config_cache.get(guild_id_str)
         if not config:
