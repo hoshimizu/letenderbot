@@ -24,7 +24,7 @@ class Createinvite(commands.Cog):
             return
 
         try:
-            invite_link = await interaction.channel.create_invite(max_age=86400, max_uses=10, unique=False)
+            invite_link = await interaction.channel.create_invite(max_age=-1, max_uses=-1, unique=False)
         except discord.Forbidden:
             await interaction.response.send_message('招待リンクを作成する権限がありません。', ephemeral=True)
             return
@@ -35,8 +35,8 @@ class Createinvite(commands.Cog):
 
         invite_embed = discord.Embed(title='招待リンクを作成しました！', color=discord.Color.green())
         invite_embed.add_field(name='招待リンク:', value=f'{invite_link}', inline=False)
-        invite_embed.add_field(name='有効期限:', value='24時間', inline=False)
-        invite_embed.add_field(name='使用回数制限:', value='10回', inline=False)
+        invite_embed.add_field(name='有効期限:', value='なし', inline=False)
+        invite_embed.add_field(name='使用回数制限:', value='1なし', inline=False)
         await interaction.response.send_message(embed=invite_embed, ephemeral=True)
 
 
